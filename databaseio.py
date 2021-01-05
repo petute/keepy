@@ -31,9 +31,9 @@ def read_entry(database, identifier):
     c.execute("SELECT * FROM entries WHERE name=?", (identifier,))
     data = list(c.fetchone())
     data[2] = crypto.decrypt(data[2])
-    return data
-
     conn.close()
+
+    return data
 
 
 # Function to add a new entry.
