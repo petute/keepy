@@ -36,3 +36,26 @@ def read_entry(database, identifier):
     conn.close()
 
 
+# Function to add a new entry.
+
+
+def add_entry(database, entry):
+    conn = sqlite3.connect(database)
+    c = conn.cursor()
+    entry["password"] = crypto.encrypt(entry["password"])
+
+    c.execute(
+        "INSERT INTO entries VALUES ('"
+        + entry["name"]
+        + "','"
+        + entry["username"]
+        + "','"
+        + entry["password"]
+        + "','"
+        + entry["description"]
+        + "')"
+    )
+
+    conn.commit()
+    conn.close()
+
