@@ -20,3 +20,19 @@ def create_db(database):
     conn.commit()
     conn.close()
 
+
+# Function to read existing entry.
+
+
+def read_entry(database, identifier):
+    conn = sqlite3.connect(database)
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM entries WHERE name=?", (identifier,))
+    data = list(c.fetchone())
+    data[2] = crypto.decrypt(data[2])
+    return data
+
+    conn.close()
+
+
