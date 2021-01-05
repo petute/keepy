@@ -59,3 +59,28 @@ def add_entry(database, entry):
     conn.commit()
     conn.close()
 
+
+# Function to change or delete entry (if changes == None).
+
+
+def change_or_delete_entry(database, identifier, row, change):
+    conn = sqlite3.connect(database)
+    c = conn.cursor()
+
+    if change == None:
+        c.execute("DELETE FROM entries WHERE name=?", (identifier,))
+        print("Deleted")
+    else:
+        c.execute(
+            "UPDATE entries SET "
+            + row
+            + " = '"
+            + change
+            + "' WHERE name = '"
+            + identifier
+            + "'"
+        )
+        print("Updated")
+
+    conn.commit()
+    conn.close()
