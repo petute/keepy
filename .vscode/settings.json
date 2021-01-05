@@ -1,0 +1,10 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "python.formatting.provider": "black",
+    "python.formatting.autopep8Args": [
+        "blackArgs"
+    ],
+    "python.formatting.autopep8Path": "blackPath"
+}
