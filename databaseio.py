@@ -31,8 +31,8 @@ def read_entry(database, identifier):
     c.execute("SELECT * FROM entries WHERE name=?", (identifier,))
     data = list(c.fetchone())
     data[2] = crypto.decrypt(data[2])
-    conn.close()
 
+    conn.close()
     return data
 
 
