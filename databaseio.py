@@ -4,7 +4,7 @@ import crypto
 # Class to handle all sqlite database interaction.
 
 
-# Function to create database and to create the table.
+# Function to create the database and to create the table.
 
 
 def create_db(database):
@@ -21,7 +21,7 @@ def create_db(database):
     conn.close()
 
 
-# Function to read existing entry.
+# Function to read an existing entry.
 
 
 def read_entry(database, identifier):
@@ -60,7 +60,7 @@ def add_entry(database, entry):
     conn.close()
 
 
-# Function to change or delete entry (if changes == None).
+# Function to change or delete an entry (if changes == None).
 
 
 def change_or_delete_entry(database, identifier, row, change):
