@@ -36,6 +36,6 @@ databaseio.add_entry(database, entries[0])
 # databaseio.add_entry(database, entries[3])
 
 print(databaseio.read_entry(database, "instagram"))
-databaseio.change_or_delete_entry(database, "instagram", "description", "Time cosuming nostalgia")
+databaseio.change_or_delete_entry(database, "instagram", "description", "Time consuming nostalgia")
 print(databaseio.read_entry(database, "instagram"))
 databaseio.change_or_delete_entry(database, "instagram", None, None)

@@ -37,6 +37,7 @@ def read_entry(database, identifier):
 
 
 # Function to add a new entry.
+# TODO: regex
 
 
 def add_entry(database, entry):
@@ -45,15 +46,13 @@ def add_entry(database, entry):
     entry["password"] = crypto.encrypt(entry["password"])
 
     c.execute(
-        "INSERT INTO entries VALUES ('"
-        + entry["name"]
-        + "','"
-        + entry["username"]
-        + "','"
-        + entry["password"]
-        + "','"
-        + entry["description"]
-        + "')"
+        "INSERT INTO entries VALUES (?,?,?,?)",
+        (
+            entry["name"],
+            entry["username"],
+            entry["password"],
+            entry["description"],
+        ),
     )
 
     conn.commit()
@@ -61,6 +60,7 @@ def add_entry(database, entry):
 
 
 # Function to change or delete an entry (if changes == None).
+# TODO: regex
 
 
 def change_or_delete_entry(database, identifier, row, change):
@@ -72,13 +72,11 @@ def change_or_delete_entry(database, identifier, row, change):
         print("Deleted")
     else:
         c.execute(
-            "UPDATE entries SET "
-            + row
-            + " = '"
-            + change
-            + "' WHERE name = '"
-            + identifier
-            + "'"
+            "UPDATE entries SET " + row + " = ? WHERE name=?",
+            (
+                change,
+                identifier,
+            ),
         )
         print("Updated")
 
