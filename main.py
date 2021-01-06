@@ -28,7 +28,9 @@ entries = [
     },
 ]
 
-# databaseio.createDb(database)
+# databaseio.create_db(database)
+
+databaseio.login("Passwort", database)
  
 databaseio.add_entry(database, entries[0])
 # databaseio.add_entry(database, entries[1])
@@ -39,3 +41,5 @@ print(databaseio.read_entry(database, "instagram"))
 databaseio.change_or_delete_entry(database, "instagram", "description", "Time consuming nostalgia")
 print(databaseio.read_entry(database, "instagram"))
 databaseio.change_or_delete_entry(database, "instagram", None, None)
+
+databaseio.logout(database)
