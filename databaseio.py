@@ -1,5 +1,5 @@
 import sqlite3
-from crypto import Crypto as crypto
+import crypto
 
 # Class to handle all sqlite database interaction.
 
@@ -83,12 +83,14 @@ def read_entry(database, identifier):
     conn = sqlite3.connect(database)
     c = conn.cursor()
 
-    c.execute("SELECT * FROM salt WHERE id=0")
-    salt = list(c.fetchone())
+    c.execute("SELECT salt FROM salt WHERE id=0")
+    salt = c.fetchone()[0]
+    c.execute("SELECT enc_pass FROM session WHERE id=0")
+    password = c.fetchone()[0]
 
     c.execute("SELECT * FROM entries WHERE name=?", (identifier,))
     data = list(c.fetchone())
-    data[2] = crypto.decrypt(data[2], salt[1])
+    data[2] = crypto.de_or_encrypt(data[2], salt, password, "decrypt")
 
     conn.close()
     return data
@@ -101,10 +103,12 @@ def add_entry(database, entry):
     conn = sqlite3.connect(database)
     c = conn.cursor()
 
-    c.execute("SELECT * FROM salt WHERE id=0")
-    salt = list(c.fetchone())
+    c.execute("SELECT salt FROM salt WHERE id=0")
+    salt = c.fetchone()[0]
+    c.execute("SELECT enc_pass FROM session WHERE id=0")
+    password = c.fetchone()[0]
 
-    entry["password"] = crypto.encrypt(entry["password"], salt[1])
+    entry["password"] = crypto.de_or_encrypt(entry["password"], salt, password, "encrypt")
 
     c.execute(
         "INSERT INTO entries VALUES (?,?,?,?)",
@@ -130,12 +134,16 @@ def change_or_delete_entry(database, identifier, row, change):
     c = conn.cursor()
 
     c.execute("SELECT * FROM salt WHERE id=0")
-    salt = list(c.fetchone())
+    salt = c.fetchone()[0]
+    c.execute("SELECT enc_pass FROM session WHERE id=0")
+    password = c.fetchone()[0]
 
     if change == None:
         c.execute("DELETE FROM entries WHERE name=?", (identifier,))
         print("Deleted")
     else:
+        if row == password:
+            change = crypto.de_or_encrypt(change, salt, password, "decrypt")
         c.execute(
             "UPDATE entries SET " + row + "=? WHERE name=?",
             (
