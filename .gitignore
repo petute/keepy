@@ -1,3 +1,12 @@
 # Databases
 
 *.db
+
+# Virtual Environment
+
+/linux-venv
+
+# Pycache
+
+/__pycache__
+*.pyc
