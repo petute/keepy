@@ -1,6 +1,6 @@
 # Databases
 
-*.db
+*.sqlite
 
 # Virtual Environment
 
