@@ -1,46 +1,107 @@
-import databaseio, crypto
+from os import path, remove
+import databaseio
 
 mydb = databaseio.DatabaseIO()
-database = "test.db"
-entries = [
-    {
-        "name": "instagram",
-        "username": "tutschi",
-        "password": "LetMeIn",
-        "description": "bonus info",
-    },
-    {
-        "name": "youtube",
-        "username": "tutschi",
-        "password": "11supersave11",
-        "description": "bonus info",
-    },
-    {
-        "name": "pornhub",
-        "username": "tutschi",
-        "password": "YouShallPass",
-        "description": "bonus info",
-    },
-    {
-        "name": "twitter",
-        "username": "tutschi",
-        "password": "Passwd",
-        "description": "bonus info",
-    },
-]
+database_name = ""
 
-# mydb.create_db(database)
+# Function to display some help text
+def help():
+    print("If you are new you have to setup a new database!\n" +
+    "You can login to one database with many passwords but you have to remember" + 
+    " which entry works with what password (to be changed)\n" +
+    "Here is a list of available commands:\n" +
+    "  create_db <name>                               Creates new Database.\n" +
+    "  delete_db <name>                               Deletes Database.\n" +
+    "  login <database_name> <password>               Logs you into existing Database.\n" +
+    "  logout                                         Logs you out of current Database.\n" +
+    "  add <name> <username> <password> <description> Add a new entry.\n" +
+    "  change <entry_name> <field_to_change> <change> Change a field of an entry." + 
+    "Field to change is password, name etc.\n" +
+    "  delete <name>                                  Delete entry.\n" +
+    "  read <name>                                    Read an entry.")
 
-mydb.login("Passwort", database)
- 
-# mydb.add_entry(database, entries[0])
-# databaseio.add_entry(database, entries[1])
-# databasio.add_entry(database, entries[2])
-# databaseio.add_entry(database, entries[3])
+# Function that calls the function that creates a database :)
+def create_db(database):
+    if path.exists(database):
+        print("Database already exists!")
+    else:
+        if(database.split(".")[-1] != "sqlite"):
+            mydb.create_db(database + ".sqlite")
+        else:
+            mydb.create_db(database)
+        print("Database " + database + " created!")
 
-print(mydb.read_entry(database, "instagram"))
-mydb.change_or_delete_entry(database, "instagram", "description", "Sum text")
-print(mydb.read_entry(database, "instagram"))
-# mydb.change_or_delete_entry(database, "instagram", None, None)
+def delete_db(database):
+    if(database.split(".")[-1] != "sqlite"):
+        remove(database + ".sqlite")
+    else:
+        remove(database)
+    print("Database " + database + " removed!")
 
-mydb.logout(database)
+def login(password, database):
+    if (path.exists(database + ".sqlite") and database.split(".")[-1] != "sqlite" 
+        or path.exists(databae) and databse.split(".")[-1] == "sqlite"):
+        database_name = database
+        mydb.login(password, database + ".sqlite")
+        print("Logged in")
+    else:
+        print("Database does not exist.")
+
+def logout():
+    if database_name != "":
+        mydb.logout()
+        print("Logged out")
+    else:
+        print("Could not logout!")
+
+def add(name, username, password, description):
+    mydb.add_entry(name, username, password, description)
+    print("Added Entry")
+
+# TODO check what happens when entry doesn't exist.
+def change(name, row, change):
+    mydb.change_or_delete_entry(name, row, change)
+    print("Field changed")
+
+def delete(name):
+    mydb.change_or_delete_entry(name, None, None)
+    print("Entry Deleted")
+
+def read(name):
+    print(mydb.read_entry(name))
+
+
+
+# Welcome message
+print("Welcome to keepy. Your shitty python keymanager!")
+print("To get an overview of the available commands type help, to quit type quit or q\n")
+
+# Loop to get input
+while True:
+    user_input = input()
+    user_input = user_input.split(" ")
+    if user_input[0] == "help":
+        help()
+    elif user_input[0] == "quit" or user_input[0] == "q":
+        break
+    elif user_input[0] == "create_db" and len(user_input) == 2:
+        create_db(user_input[1])
+    elif user_input[0] == "delete_db" and len(user_input) == 2:
+        delete_db(user_input[1])
+    elif user_input[0] == "login" and len(user_input) == 3:
+        login(user_input[2], user_input[1])
+    elif user_input[0] == "logout" and len(user_input) == 1:
+        logout()
+    elif user_input[0] == "add" and len(user_input) == 5:
+        add(user_input[1], user_input[2], user_input[3], user_input[4])
+    elif user_input[0] == "change" and len(user_input) == 4:
+        change(user_input[1], user_input[2], user_input[3])
+    elif user_input[0] == "delete" and len(user_input) == 2:
+        delete(user_input[1])
+    elif user_input[0] == "read" and len(user_input) == 2:
+        read(user_input[1])
+    else:
+        print("Command not available. For list of commands type 'help'")
+
+if database_name != "":
+    mydb.logout(database_name)

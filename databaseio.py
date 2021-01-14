@@ -5,6 +5,7 @@ import crypto
 class DatabaseIO():
     def __init__(self):
         self.mycrypto = crypto.Crypto()
+        self.database = ""
 
     # Function to create the database and to create the tables.
 
@@ -47,6 +48,7 @@ class DatabaseIO():
         conn = sqlite3.connect(database)
         c = conn.cursor()
 
+        self.database = database
         enc_pass = self.mycrypto.tmp_encrypt(password)
 
         # In case the program wasn't closed properly
@@ -67,10 +69,11 @@ class DatabaseIO():
     # Function to logout of a session.
 
 
-    def logout(self, database):
-        conn = sqlite3.connect(database)
+    def logout(self):
+        conn = sqlite3.connect(self.database)
         c = conn.cursor()
 
+        self.database = ""
         c.execute("DELETE FROM session WHERE id=0")
 
         conn.commit()
@@ -80,8 +83,8 @@ class DatabaseIO():
     # Function to read an existing entry.
 
 
-    def read_entry(self, database, identifier):
-        conn = sqlite3.connect(database)
+    def read_entry(self, identifier):
+        conn = sqlite3.connect(self.database)
         c = conn.cursor()
 
         c.execute("SELECT salt FROM salt WHERE id=0")
@@ -100,24 +103,24 @@ class DatabaseIO():
     # Function to add a new entry.
 
 
-    def add_entry(self, database, entry):
-        conn = sqlite3.connect(database)
+    def add_entry(self, name, username, password, description):
+        conn = sqlite3.connect(self.database)
         c = conn.cursor()
 
         c.execute("SELECT salt FROM salt WHERE id=0")
         salt = c.fetchone()[0]
         c.execute("SELECT enc_pass FROM session WHERE id=0")
-        password = c.fetchone()[0]
+        enc_password = c.fetchone()[0]
 
-        entry["password"] = self.mycrypto.encrypt(entry["password"], salt, password)
+        password = self.mycrypto.encrypt(password, salt, enc_password)
 
         c.execute(
             "INSERT INTO entries VALUES (?,?,?,?)",
             (
-                entry["name"],
-                entry["username"],
-                entry["password"],
-                entry["description"],
+                name,
+                username,
+                password,
+                description,
             ),
         )
         conn.commit()
@@ -126,20 +129,22 @@ class DatabaseIO():
     # Function to change or delete an entry (if changes == None).
 
 
-    def change_or_delete_entry(self, database, identifier, row, change):
-        conn = sqlite3.connect(database)
+    def change_or_delete_entry(self, identifier, row, change):
+        conn = sqlite3.connect(self.database)
         c = conn.cursor()
 
         c.execute("SELECT * FROM salt WHERE id=0")
         salt = c.fetchone()[0]
         c.execute("SELECT enc_pass FROM session WHERE id=0")
-        password = c.fetchone()[0]
+        enc_password = c.fetchone()[0]
+        password = self.mycrypto.tmp_decrypt(enc_password)
 
         if change == None:
             c.execute("DELETE FROM entries WHERE name=?", (identifier,))
         else:
             if row == password:
                 change = self.mycrypto.encrypt(change, salt, password)
+                print(type(change))
             c.execute(
                 "UPDATE entries SET " + row + "=? WHERE name=?",
                 (

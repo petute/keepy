@@ -30,6 +30,7 @@ class Crypto():
         key = base64.urlsafe_b64encode(kdf.derive(password))
         f = Fernet(key)
         data = f.encrypt(str.encode(data))
+        print(type(data))
         return data
 
     # Funcion to decrypt saved passwords
