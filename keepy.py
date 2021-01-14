@@ -2,13 +2,13 @@ from os import path, remove
 import databaseio
 
 mydb = databaseio.DatabaseIO()
-database_name = ""
+__database_name = ""
 
 # Function to display some help text
 def help():
     print("If you are new you have to setup a new database!\n" +
     "You can login to one database with many passwords but you have to remember" + 
-    " which entry works with what password (to be changed)\n" +
+    " which entry works with what password (to maybe be changed)\n" +
     "Here is a list of available commands:\n" +
     "  create_db <name>                               Creates new Database.\n" +
     "  delete_db <name>                               Deletes Database.\n" +
@@ -56,7 +56,6 @@ def logout():
         mydb.logout()
         print("Logged out")
     else:
-        print(database_name)
         print("Could not logout!")
 
 # Interface function to add an new entry
@@ -108,7 +107,6 @@ while True:
         delete_db(user_input[1])
     elif user_input[0] == "login" and len(user_input) == 3:
         login(user_input[2], user_input[1])
-        print(user_input[1])
     elif user_input[0] == "logout" and len(user_input) == 1:
         logout()
     elif user_input[0] == "add" and len(user_input) == 5:
