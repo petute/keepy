@@ -1,5 +1,6 @@
 import databaseio, crypto
 
+mydb = databaseio.DatabaseIO()
 database = "test.db"
 entries = [
     {
@@ -28,18 +29,20 @@ entries = [
     },
 ]
 
-# databaseio.create_db(database)
+# mydb.create_db(database)
 
-databaseio.login("Passwort", database)
+mydb.login("Passwort", database)
+
+print("Main: " + entries[0]["password"])
  
-databaseio.add_entry(database, entries[0])
+mydb.add_entry(database, entries[0])
 # databaseio.add_entry(database, entries[1])
 # databasio.add_entry(database, entries[2])
 # databaseio.add_entry(database, entries[3])
 
-print(databaseio.read_entry(database, "instagram"))
-databaseio.change_or_delete_entry(database, "instagram", "description", "Time consuming nostalgia")
-print(databaseio.read_entry(database, "instagram"))
-databaseio.change_or_delete_entry(database, "instagram", None, None)
+print(mydb.read_entry(database, "instagram"))
+mydb.change_or_delete_entry(database, "instagram", "description", "Time consuming nostalgia")
+print(mydb.read_entry(database, "instagram"))
+mydb.change_or_delete_entry(database, "instagram", None, None)
 
-databaseio.logout(database)
+mydb.logout(database)
