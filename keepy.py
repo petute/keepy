@@ -31,6 +31,7 @@ def create_db(database):
             mydb.create_db(database)
         print("Database " + database + " created!")
 
+# Interface function to delete a database
 def delete_db(database):
     if(database.split(".")[-1] != "sqlite"):
         remove(database + ".sqlite")
@@ -38,16 +39,18 @@ def delete_db(database):
         remove(database)
     print("Database " + database + " removed!")
 
+# Interface function to log into a database
 def login(password, database):
     if (path.exists(database + ".sqlite") and database.split(".")[-1] != "sqlite" 
         or path.exists(databae) and databse.split(".")[-1] == "sqlite"):
+        global database_name
         database_name = database
-        print(database_name)
         mydb.login(password, database + ".sqlite")
         print("Logged in")
     else:
         print("Database does not exist.")
 
+# Interface function to logout
 def logout():
     if database_name != "":
         mydb.logout()
@@ -56,33 +59,34 @@ def logout():
         print(database_name)
         print("Could not logout!")
 
+# Interface function to add an new entry
 def add(name, username, password, description):
-    # if database_name == "":
-    #     print("Please log into a database first.")
-    # else:
-    mydb.add_entry(name, username, password, description)
-    print("Added Entry")
+    if database_name == "":
+        print("Please log into a database first.")
+    else:
+        mydb.add_entry(name, username, password, description)
+        print("Added Entry")
 
-# TODO check what happens when entry doesn't exist.
+# Interface function to change a field of an entry
 def change(name, row, change):
-    # if database_name == "":
-    #     print("Please log into a database first.")
-    # else:
-    mydb.change_or_delete_entry(name, row, change)
-    print("Field changed")
+    if database_name == "":
+        print("Please log into a database first.")
+    else:
+        mydb.change_or_delete_entry(name, row, change)
 
+# Interface function to delete an entry
 def delete(name):
-    # if database_name == "":
-    #     print("Please log into a database first.")
-    # else:
-    mydb.change_or_delete_entry(name, None, None)
-    print("Entry Deleted")
+    if database_name == "":
+        print("Please log into a database first.")
+    else:
+        mydb.change_or_delete_entry(name, None, None)
 
+# Interdace function to read entry
 def read(name):
-    # if database_name == "":
-    #     print("Please log into a database first.")
-    # else:
-    print(mydb.read_entry(name))
+    if database_name == "":
+        print("Please log into a database first.")
+    else:
+        print(mydb.read_entry(name))
 
 
 
@@ -116,4 +120,6 @@ while True:
     elif user_input[0] == "read" and len(user_input) == 2:
         read(user_input[1])
     else:
-        print("Command not available. For list of commands type 'help'")
+        print("Command not available or wrong use. For list of commands type 'help'")
+
+logout()

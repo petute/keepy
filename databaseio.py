@@ -8,7 +8,6 @@ class DatabaseIO():
         self.database = ""
 
     # Function to create the database and to create the tables.
-
     def create_db(self, database):
         conn = sqlite3.connect(database)
         c = conn.cursor()
@@ -42,8 +41,6 @@ class DatabaseIO():
 
 
     # Function to log into a session.
-
-
     def login(self, password, database):
         conn = sqlite3.connect(database)
         c = conn.cursor()
@@ -67,8 +64,6 @@ class DatabaseIO():
 
 
     # Function to logout of a session.
-
-
     def logout(self):
         conn = sqlite3.connect(self.database)
         c = conn.cursor()
@@ -81,8 +76,6 @@ class DatabaseIO():
 
 
     # Function to read an existing entry.
-
-
     def read_entry(self, identifier):
         conn = sqlite3.connect(self.database)
         c = conn.cursor()
@@ -101,8 +94,6 @@ class DatabaseIO():
 
 
     # Function to add a new entry.
-
-
     def add_entry(self, name, username, password, description):
         conn = sqlite3.connect(self.database)
         c = conn.cursor()
@@ -127,15 +118,12 @@ class DatabaseIO():
         conn.close()
 
     # Function to change or delete an entry (if changes == None).
-
-
     def change_or_delete_entry(self, identifier, row, change):
         conn = sqlite3.connect(self.database)
         c = conn.cursor()
 
         c.execute("SELECT salt FROM salt WHERE id=0")
         salt = c.fetchone()[0]
-        print(salt)
         c.execute("SELECT enc_pass FROM session WHERE id=0")
         enc_password = c.fetchone()[0]
 

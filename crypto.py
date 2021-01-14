@@ -58,3 +58,4 @@ class Crypto():
         f = Fernet(self.__tmp_key)
         data = f.decrypt(data)
         return data
+        
