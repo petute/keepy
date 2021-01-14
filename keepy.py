@@ -42,6 +42,7 @@ def login(password, database):
     if (path.exists(database + ".sqlite") and database.split(".")[-1] != "sqlite" 
         or path.exists(databae) and databse.split(".")[-1] == "sqlite"):
         database_name = database
+        print(database_name)
         mydb.login(password, database + ".sqlite")
         print("Logged in")
     else:
@@ -52,22 +53,35 @@ def logout():
         mydb.logout()
         print("Logged out")
     else:
+        print(database_name)
         print("Could not logout!")
 
 def add(name, username, password, description):
+    # if database_name == "":
+    #     print("Please log into a database first.")
+    # else:
     mydb.add_entry(name, username, password, description)
     print("Added Entry")
 
 # TODO check what happens when entry doesn't exist.
 def change(name, row, change):
+    # if database_name == "":
+    #     print("Please log into a database first.")
+    # else:
     mydb.change_or_delete_entry(name, row, change)
     print("Field changed")
 
 def delete(name):
+    # if database_name == "":
+    #     print("Please log into a database first.")
+    # else:
     mydb.change_or_delete_entry(name, None, None)
     print("Entry Deleted")
 
 def read(name):
+    # if database_name == "":
+    #     print("Please log into a database first.")
+    # else:
     print(mydb.read_entry(name))
 
 
@@ -90,6 +104,7 @@ while True:
         delete_db(user_input[1])
     elif user_input[0] == "login" and len(user_input) == 3:
         login(user_input[2], user_input[1])
+        print(user_input[1])
     elif user_input[0] == "logout" and len(user_input) == 1:
         logout()
     elif user_input[0] == "add" and len(user_input) == 5:
@@ -102,6 +117,3 @@ while True:
         read(user_input[1])
     else:
         print("Command not available. For list of commands type 'help'")
-
-if database_name != "":
-    mydb.logout(database_name)

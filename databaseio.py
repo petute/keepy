@@ -21,7 +21,7 @@ class DatabaseIO():
 
         c.execute(
             """CREATE TABLE salt
-                        (id integer, salt text)"""
+                        (id integer, salt blob)"""
         )
         c.execute(
             "INSERT INTO salt VALUES (?,?)",
@@ -133,18 +133,17 @@ class DatabaseIO():
         conn = sqlite3.connect(self.database)
         c = conn.cursor()
 
-        c.execute("SELECT * FROM salt WHERE id=0")
+        c.execute("SELECT salt FROM salt WHERE id=0")
         salt = c.fetchone()[0]
+        print(salt)
         c.execute("SELECT enc_pass FROM session WHERE id=0")
         enc_password = c.fetchone()[0]
-        password = self.mycrypto.tmp_decrypt(enc_password)
 
         if change == None:
             c.execute("DELETE FROM entries WHERE name=?", (identifier,))
         else:
-            if row == password:
-                change = self.mycrypto.encrypt(change, salt, password)
-                print(type(change))
+            if row == "password":
+                change = self.mycrypto.encrypt(change, salt, enc_password)
             c.execute(
                 "UPDATE entries SET " + row + "=? WHERE name=?",
                 (
