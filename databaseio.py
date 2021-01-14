@@ -137,7 +137,6 @@ class DatabaseIO():
 
         if change == None:
             c.execute("DELETE FROM entries WHERE name=?", (identifier,))
-            print("Deleted")
         else:
             if row == password:
                 change = self.mycrypto.encrypt(change, salt, password)

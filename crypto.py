@@ -34,8 +34,6 @@ class Crypto():
 
     # Funcion to decrypt saved passwords
     def decrypt(self, data, salt, enc_password):
-        print("DECRYPT: ")
-        print(data)
         password = self.tmp_decrypt(enc_password)
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),

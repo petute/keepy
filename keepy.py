@@ -32,17 +32,15 @@ entries = [
 # mydb.create_db(database)
 
 mydb.login("Passwort", database)
-
-print("Main: " + entries[0]["password"])
  
-mydb.add_entry(database, entries[0])
+# mydb.add_entry(database, entries[0])
 # databaseio.add_entry(database, entries[1])
 # databasio.add_entry(database, entries[2])
 # databaseio.add_entry(database, entries[3])
 
 print(mydb.read_entry(database, "instagram"))
-mydb.change_or_delete_entry(database, "instagram", "description", "Time consuming nostalgia")
+mydb.change_or_delete_entry(database, "instagram", "description", "Sum text")
 print(mydb.read_entry(database, "instagram"))
-mydb.change_or_delete_entry(database, "instagram", None, None)
+# mydb.change_or_delete_entry(database, "instagram", None, None)
 
 mydb.logout(database)
