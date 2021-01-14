@@ -2,7 +2,7 @@ from os import path, remove
 import databaseio
 
 mydb = databaseio.DatabaseIO()
-__database_name = ""
+database_name = ""
 
 # Function to display some help text
 def help():
@@ -120,4 +120,5 @@ while True:
     else:
         print("Command not available or wrong use. For list of commands type 'help'")
 
-logout()
+if database_name != "":
+    logout()

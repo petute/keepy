@@ -86,8 +86,11 @@ class DatabaseIO():
         password = c.fetchone()[0]
 
         c.execute("SELECT * FROM entries WHERE name=?", (identifier,))
-        data = list(c.fetchone())
-        data[2] = self.mycrypto.decrypt(data[2], salt, password)
+        data = c.fetchall()
+        if data != []:
+            data[2] = self.mycrypto.decrypt(data[2], salt, password)
+        else:
+            data = "Can not read nonexistant entry"
 
         conn.close()
         return data
