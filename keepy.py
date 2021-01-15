@@ -85,9 +85,16 @@ def read(name):
     if database_name == "":
         print("Please log into a database first.")
     else:
-        print(mydb.read_entry(name))
-
-
+        list = mydb.read_entry(name)
+        for count, element in enumerate(list):
+            if count == 0:
+                print("\nName: " + element)
+            elif count == 1:
+                print("Username: " + element)
+            elif count == 2:
+                print("Password: " + element)
+            elif count == 3:
+                print("Description: " + element)
 
 # Welcome message
 print("Welcome to keepy. Your shitty python keymanager!")
