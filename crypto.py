@@ -42,7 +42,10 @@ class Crypto():
         )
         key = base64.urlsafe_b64encode(kdf.derive(password))
         f = Fernet(key)
-        data = f.decrypt(data)
+        try:
+            data = f.decrypt(data)
+        except:
+            print("Wrong Password for this entry")
         return data
 
     # Function to encrypt the masterpassword
