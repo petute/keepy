@@ -11,7 +11,7 @@ class Crypto():
     def __init__(self):
         self.__tmp_key = Fernet.generate_key()
     
-    # Function to setup cryptography and to return the salt
+    # Function generate the salt
     def generate_salt(self):
         salt = os.urandom(16)
         return salt
